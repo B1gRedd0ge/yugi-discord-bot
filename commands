@@ -16,20 +16,20 @@ from discord.ext.commands import Bot
 
 path = 'C:/path/to/cardImagesDirectory/'
 														
-														# When entering in the path the the images folder
-														# make sure to use / python really hates \
+					# When entering in the path the the images folder
+					# make sure to use / python really hates \
 
 # files = [file for file in listdir(path) if isfile(join(path, file))]	
 									
-														# This originally was used to select the random image but now it is 
-														# selected from the database list of cardIDs and then 
-														# that card ID is passed to the path variable with '.png' added. 
-														# Leaving it commented in incase we decide this is a more efficient way of 
-														# selecting an image in the future.
+					# This originally was used to select the random image but now it is 
+					# selected from the database list of cardIDs and then 
+					# that card ID is passed to the path variable with '.png' added. 
+					# Leaving it commented in incase we decide this is a more efficient way of 
+					# selecting an image in the future.
 
 BOT_PREFIX = ("$", "?") 
 											
-														# sets what special character the user will put before the commands
+					# sets what special character the user will put before the commands
 
 client = Bot(command_prefix=BOT_PREFIX)
 
@@ -37,84 +37,76 @@ client = Bot(command_prefix=BOT_PREFIX)
 @client.event 	
 async def on_ready():
    import discord
-														# I'll be honest I dont remember why this is here, 
-														# since discord is already on the import list, 
-														# removing it and testing is on the TODO.
+					# I'll be honest I dont remember why this is here, 
+					# since discord is already on the import list, 
+					# removing it and testing is on the TODO.
 
 @client.event 
-
 async def on_ready():
-    
     print("Logged in as " + client.user.name)
 														
-														# Prints the name of the bot you are using to console when the bot is successfully logged in
+					# Prints the name of the bot you are using to console when the bot is successfully logged in
 														
 
 @client.command(name='card', 
-								description="gives random card to user and stores it under their user ID in database.", 
-								brief="gives random card to user.", 
-								aliases=['cardplz', '8ball', 'manIcouldUseAcard'], 
-								pass_context=True)  
+		description="gives random card to user and stores it under their user ID in database.", 
+		brief="gives random card to user.", 
+		aliases=['cardplz', '8ball', 'manIcouldUseAcard'], 
+		pass_context=True)  
 														
-														# This is the $card command which at the moment gives 
-														# the user who sent the command a random card 
-														# and logs it under their userID in the database
-														# don't plan on keeping this system for giving out cards in the 
-														# future but for now its the best way to get data to make 
-														# sure things are working properly on the data querying side of things
-														# The stuff in () sets word to come after the bot prefix to trigger command and
-														# a description of the command, pass_context means that it decides 
-														# the message and channel args dynamically based on the location and
-														# user who sent the message
+					# This is the $card command which at the moment gives 
+					# the user who sent the command a random card 
+					# and logs it under their userID in the database
+					# don't plan on keeping this system for giving out cards in the 
+					# future but for now its the best way to get data to make 
+					# sure things are working properly on the data querying side of things
+					# The stuff in () sets word to come after the bot prefix to trigger command and
+					# a description of the command, pass_context means that it decides 
+					# the message and channel args dynamically based on the location and
+					# user who sent the message
 
 async def give_card(context): 
 			
-														# either async or await needs to 
-														# be placed in front of processes
-														# that need to run in order due to 
-														# this module running asynchronous
-	
+					# either async or await needs to 
+					# be placed in front of processes
+					# that need to run in order due to 
+					# this module running asynchronous
+
 	db = dataset.connect('sqlite:///bot.db')
-		
 	data = db.query('SELECT * FROM cardData WHERE cardID IN (SELECT cardID FROM cardData ORDER BY RANDOM() LIMIT 1)') 
 											
-														# An example of a query from the database, install and import dataset
-														# in order to use this. this particular query selects an entry from the
-														# cardID column in the cardData table 
-   
+					# An example of a query from the database, install and import dataset
+					# in order to use this. this particular query selects an entry from the
+					# cardID column in the cardData table 
+
 	for row in data:
-            
 		card = (row['cardID'])
-		
     name = db.query('SELECT cardName FROM cardData WHERE cardID=:card;', {'card': card}) 
 														
-														# This pulls the card name of the cardID pulled from the previous query  
-                
-    with open(path + card + ".png", 'rb') as fp:
-                    
+					# This pulls the card name of the cardID pulled from the previous query  
+
+    with open(path + card + ".png", 'rb') as fp:            
     	await context.channel.send('you activated my trap card' + context.message.author.mention) 
 															
-															# Sends message with the text in quotes
-															# and mentions the user who initiated 
-															# the command.
-															# Looking into sending embeded messages.
+					# Sends message with the text in quotes
+					# and mentions the user who initiated 
+					# the command.
+					# Looking into sending embeded messages.
 
     	await context.channel.send(file=discord.File(fp, card + '.png', str(card))) 
 															
-															# Sends the image.
-
-    table = db['users']
-    
-    table.insert(dict(userID=str(context.message.author.id), username=str(context.message.author.id))) 
+					# Sends the image.
+				
+	table = db['users']
+	table.insert(dict(userID=str(context.message.author.id), username=str(context.message.author.id))) 
 																
-															# Creates entry for the user in 
-															# the users table of the database. 
-															# If the user has been entered 
-															# previously it skips and moves on
-    
-		table = db['collections']
-    
-    table.insert(dict(userID=str(context.message.author.id), cardID=str(card))) 
+					# Creates entry for the user in 
+					# the users table of the database. 
+					# If the user has been entered 
+					# previously it skips and moves on
+
+	table = db['collections']
+    	table.insert(dict(userID=str(context.message.author.id), cardID=str(card))) 
 								
 															# Registers the new card to the userID in the collections
 															# table, at the moment you can have duplicate cards but 
@@ -123,25 +115,23 @@ async def give_card(context):
 																																								
 
 	
-@client.command(name='myinventory', pass_context=True) # command to list all of the cards currently registered to the user 
+@client.command(name='myinventory', pass_context=True) 
 async def get_cards(context):
-    													# This command is real messy and incomplete is top of the TODO list 
-															# not well commented because likely to drastically change soon.
-    
-		user = context.message.author.id
-    
+					# Command to list all of the cards currently registered to the user. 
+					# This command is real messy and incomplete is top of the TODO list 
+					# not well commented because likely to drastically change soon.
+    user = context.message.author.id
     await context.channel.send('Here are your cards' + context.message.author.mention)
-    
     em = discord.Embed(title='Inventory', description='Your Cards', colour=0xDEADBF)  
 												
-												# Untested way to create an embeded message with the 
-												# result of the inventory query.
-												# At the moment it sends a different message for every 
-												# card which is kind of annoying.
-												# Embeding them all into a single message would make a 
-												# result like p!pokemon from pokecord.
+					# Untested way to create an embeded message with the 
+					# result of the inventory query.
+					# At the moment it sends a different message for every 
+					# card which is kind of annoying.
+					# Embeding them all into a single message would make a 
+					# result like p!pokemon from pokecord.
     
-		em.set_author(name='context.message.author.mention', icon_url=client.user.default_avatar_url)
+    em.set_author(name='context.message.author.mention', icon_url=client.user.default_avatar_url)
     
     await client.send_message(message.channel, embed=em)
     
@@ -149,25 +139,25 @@ async def get_cards(context):
     
     usercard = db.query('SELECT cardID From collections WHERE userID=:user;', {'user': user})
     
-    for row in usercard:
+    	for row in usercard:
         
-        inven = (row['cardID'])
+        	inven = (row['cardID'])
         
-        ef = discord.Embed()
+        	ef = discord.Embed()
         
-        ef.set_image(url="https://ygoprodeck.com/pics/" + inven + '.jpg') 
+        	ef.set_image(url="https://ygoprodeck.com/pics/" + inven + '.jpg') 
         
-        await context.channel.send(message.channel, embed=ef)
+        	await context.channel.send(message.channel, embed=ef)
         
-        # await context.channel.send(file=discord.File(fp, iven + '.png'))
+        	# await context.channel.send(file=discord.File(fp, iven + '.png'))
 													
-													# Commented this line out while I test pulling images from the online
-													# card database.
+					# Commented this line out while I test pulling images from the online
+					# card database.
 
 @client.command(name='deckSet', pass_context=True)
 													
-													# Incomplete command to retrieve all cards in a certain deckset, 
-													# will comment further when its complete
+					# Incomplete command to retrieve all cards in a certain deckset, 
+					# will comment further when its complete
 
 async def deck_set(context):
   
@@ -177,5 +167,8 @@ async def deck_set(context):
   
 	dset = db.query('SELECT setcode FROM ')
 
-client.run('NTU0NDE2MjQ2NDAyMDU2MjEz.D2iDBQ.-LL9j6xLPDsQLV0fQkF3abks05U') # this is basically the log in creditials for the bot and should be treated securly like a password 
-                                                                          # will run this code on whatever bots token is entered here
+client.run('NTU0NDE2MjQ2NDAyMDU2MjEz.D2iDBQ.-LL9j6xLPDsQLV0fQkF3abks05U') 
+					
+					# This is basically the log in creditials for the bot and should be treated 
+					# securly like a password. 
+					# Will run this code on whatever bots token is entered here.
