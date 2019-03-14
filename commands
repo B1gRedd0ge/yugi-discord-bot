@@ -132,22 +132,14 @@ async def get_cards(context):
 					# result like p!pokemon from pokecord.
     
     em.set_author(name='context.message.author.mention', icon_url=client.user.default_avatar_url)
-    
     await client.send_message(message.channel, embed=em)
-    
     db = dataset.connect('sqlite:///bot.db')
-    
     usercard = db.query('SELECT cardID From collections WHERE userID=:user;', {'user': user})
-    
     	for row in usercard:
-        
         	inven = (row['cardID'])
-        
         	ef = discord.Embed()
-        
         	ef.set_image(url="https://ygoprodeck.com/pics/" + inven + '.jpg') 
-        
-        	await context.channel.send(message.channel, embed=ef)
+                	await context.channel.send(message.channel, embed=ef)
         
         	# await context.channel.send(file=discord.File(fp, iven + '.png'))
 													
@@ -160,13 +152,9 @@ async def get_cards(context):
 					# will comment further when its complete
 
 async def deck_set(context):
-  
 	userInput = context.message.content 
-  
 	db = dataset.connect('sqlite://bot.db')
-  
 	dset = db.query('SELECT setcode FROM ')
-
 client.run('NTU0NDE2MjQ2NDAyMDU2MjEz.D2iDBQ.-LL9j6xLPDsQLV0fQkF3abks05U') 
 					
 					# This is basically the log in creditials for the bot and should be treated 
