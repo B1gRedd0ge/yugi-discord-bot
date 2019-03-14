@@ -108,9 +108,9 @@ async def give_card(context):
 	table = db['collections']
     	table.insert(dict(userID=str(context.message.author.id), cardID=str(card))) 
 								
-															# Registers the new card to the userID in the collections
-															# table, at the moment you can have duplicate cards but 
-															# this can be changed if desired.
+					# Registers the new card to the userID in the collections
+					# table, at the moment you can have duplicate cards but 
+					# this can be changed if desired.
 
 																																								
 
