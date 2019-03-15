@@ -155,7 +155,7 @@ async def deck_set(context):
 	userInput = context.message.content 
 	db = dataset.connect('sqlite://bot.db')
 	dset = db.query('SELECT setcode FROM ')
-client.run('NTU0NDE2MjQ2NDAyMDU2MjEz.D2iDBQ.-LL9j6xLPDsQLV0fQkF3abks05U') 
+client.run('botTokenGoesHere') 
 					
 					# This is basically the log in creditials for the bot and should be treated 
 					# securly like a password. 
