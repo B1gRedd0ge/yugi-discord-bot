@@ -15,6 +15,11 @@ print("Welcome to the card shop! Which pack would you like to purchase?\n"
       "> [MRD] Metal Raiders\n"
       "> [LOB] Legend of Blue Eyes White Dragon\n"
       ">  [x]  Leave Shop")
+#@client.command(name='shop',
+#			pass_contex=True)
+#async def shop_menu(context):
+#	em = discord.Embed(title="Welcome to the card shop! Which pack would you like to purchase?", description="[MD1] McDonald's Promotional Cards" + "\n" + "[MRD] Metal Raiders" + "\n" + "[LOB] Legend of Blues Eyes White Dragon", colour=0xDEADBF)
+#	context.channel.send(embed=em)
 while looper1 == False:
     pack_req = input()
     if pack_req == mcd_pack:
